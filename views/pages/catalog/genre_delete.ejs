@@ -1,0 +1,34 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 mt-5">Genre: <%= genre.name %></h2>
+
+<% if(books && books.length) {%>
+<div class="alert alert-danger" role="alert">
+  <strong>Delete the following books before attempting to delete this genre!</strong>
+</div>
+<h3 class="h3 my-3">Books</h3>
+<dl>
+  <% books.forEach (function(book) {%>
+  <dt><a href="<%= book.url %>">
+      <%= book.title %></a></dt>
+  <dd>
+    <%= book.summary %>
+  </dd>
+  <% }); %>
+
+</dl>
+
+<% } else { %>
+<form action="" method="POST">
+  <p class="mt-5">
+    <strong>Do you really want to delete this Genre?</strong>
+  </p>
+  <input type="hidden" name="genreid" required value="<%= genre._id %>">
+  <button class="btn btn-danger" type="submit">Delete</button>
+</form>
+
+<% } %>
+
+<%- include('../partials/footer') -%>

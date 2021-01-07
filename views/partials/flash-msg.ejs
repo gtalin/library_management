@@ -1,0 +1,30 @@
+<% if ( messages.success && messages.success.length > 0 ) {%>
+<div class="alert alert-primary alert-dismissible" role="alert">
+  <%= messages.success %>
+</div>
+<% } %>
+
+<% if ( messages.danger && messages.danger.length > 0 ) {%>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <%= messages.danger %>
+</div>
+<% } %>
+
+<!-- This is for error messages in user creation validation-->
+<% if ( messages.validation_error && messages.validation_error.length >= 1 ) {%>
+<ul class="errors alert alert-danger">
+  <% messages.validation_error.forEach(function(message){ %>
+  <li><%= message.msg %></li>
+  <%}); %>
+</ul>
+<% } %>
+
+<% if ( messages.error && messages.error.length > 0 ) {%>
+<div class="alert alert-danger">
+  <%= messages.error %>
+</div>
+<% } %>
+
+<!-- <% if ( messages.success && messages.success.length > 0 ) { %>
+<p><strong>FLASH!</strong> <%= messages.success %></p>
+<% } %> -->

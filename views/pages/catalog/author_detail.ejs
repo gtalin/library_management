@@ -1,0 +1,38 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+
+<h2 class="h2 mt-3"><%= title %></h2>
+<p>
+  (<%= data.author.dob_formatted %> -
+  <%= data.author.dod_formatted %>)
+</p>
+
+<div class="ml-3 mt-5">
+  <h3>Books</h3>
+  <dl>
+    <% if(data.books && data.books.length!=0) {%>
+    <% data.books.forEach(function(book) { %>
+    <hr />
+    <dt><a href="<%= book.url %>">
+        <%= book.title %></a></dt>
+    <dd>
+      <%= book.summary %>
+    </dd>
+
+    <% }) %>
+    <% } else {%>
+    <p>This author has no books</p>
+    <% } %>
+  </dl>
+  <hr />
+  <p>
+    <a class="btn btn-danger" href="<%=data.author.url+'/delete'%>">Delete Author</a>
+    <a class="btn btn-primary" href="<%=data.author.url+'/update'%>">Update Author</a>
+  </p>
+
+</div>
+
+
+<%- include('../partials/footer') -%>

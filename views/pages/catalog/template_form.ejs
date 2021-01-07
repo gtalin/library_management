@@ -1,0 +1,16 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<%- include('../partials/form-error') -%>
+<form action="" method="POST">
+  <div class="form-group">
+    <label for="name">Gnere:</label>
+    <input class="form-control" type="text" name="name" id="name" placeholder="Fantasy, Poetry etc." required
+      value="<%= typeof genre!='undefined' ? genre.name : '' %>">
+  </div>
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<%- include('../partials/footer') -%>

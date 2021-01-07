@@ -1,0 +1,26 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<h3 class="h3 my-3">Books</h3>
+<dl>
+  <% if (data.books && data.books.length!=0) {%>
+  <% data.books.forEach (function(book) {%>
+  <dt><a href="<%= book.url %>">
+      <%= book.title %></a></dt>
+  <dd>
+    <%= book.summary %>
+  </dd>
+  <% }); %>
+  <% } else {%>
+  <p>This genre has no books</p>
+  <% } %>
+</dl>
+<hr />
+<p>
+  <a class="btn btn-danger" href="<%=data.genre.url+'/delete'%>">Delete Genre</a>
+  <a class="btn btn-primary" href="<%=data.genre.url+'/update'%>">Update Genre</a>
+</p>
+
+<%- include('../partials/footer') -%>

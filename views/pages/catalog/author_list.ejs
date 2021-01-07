@@ -1,0 +1,35 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<ul class="list-group my-3">
+  <% if(data.author_list.length!=0) { %>
+  <% data.author_list.forEach(function(author) { %>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+      <a href="<%= author.url %>">
+        <%= author.name %>
+      </a> |
+      <% if (author.lifespan) { %>
+      <span> (
+        <%= author.dob_formatted %> - <%= author.dod_formatted %> )</span>
+      <% } else {%>
+      <span> Date of Birth not available </span>
+      <% } %>
+    </div>
+
+    <span class="badge badge-primary badge-pill">
+      <%= author.bookCount %>
+    </span>
+  </li>
+  <% }); %>
+  <% } else { %>
+  <li>No Author exists in the Database</li>
+  <% } %>
+</ul>
+
+
+
+<%- include('../partials/footer') -%>

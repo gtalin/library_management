@@ -1,0 +1,77 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<% if (data.bookDetails) {%>
+<p>
+  <strong>Author: </strong>
+  <%= data.bookDetails.author.name %>
+</p>
+<p>
+  <strong>Summary: </strong>
+  <%= data.bookDetails.summary %>
+</p>
+<p>
+  <strong>ISBN: </strong>
+  <%= data.bookDetails.isbn %>
+</p>
+<p>
+  <strong>Genre:</strong>&nbsp;
+  <% if (data.bookDetails.genre && data.bookDetails.genre.length!=0) {%>
+  <% data.bookDetails.genre.forEach(function(genre){ %>
+  <%= genre.name %> |
+  <% }) %>
+  <% } %>
+</p>
+<% } %>
+
+<hr />
+
+<div class="ml-3 mt-5">
+  <h4 class="my-3">Copies</h4>
+  <% if (data.bookInstances && data.bookInstances.length!=0) {%>
+  <% data.bookInstances.forEach(function(instance) { %>
+
+  <hr />
+  <% if(instance.status== 'Available') {%>
+  <p class="text-success"><%= instance.status %></p>
+  <% } else if (instance.status== 'Maintenance') {%>
+  <p class="text-danger"><%= instance.status %></p>
+  <% } else {%>
+  <p class="text-warning"><%= instance.status %></p>
+  <% } %>
+
+  <p>
+    <strong>Imprint: </strong>
+    <%= instance.imprint %>
+  </p>
+  <% if(instance.status!='Available') {%>
+  <p>
+    <strong>Due back: </strong>
+    <%= instance.due_back %>
+  </p>
+  <% } %>
+  <p>
+    <strong>Id:</strong>&nbsp;
+    <a href="<%= instance.url %>">
+      <%= instance._id %>
+    </a>
+
+  </p>
+
+  <% }); %>
+  <% } else {%>
+  <p>There are no copies of this book in the library.</p>
+  <% } %>
+
+  <hr />
+  <p>
+    <a class="btn btn-danger" href="<%=data.bookDetails.url+'/delete'%>">Delete Book</a>
+    <a class="btn btn-primary" href="<%=data.bookDetails.url+'/update'%>">Update Book</a>
+  </p>
+</div>
+
+
+<%- include('../partials/footer') -%>

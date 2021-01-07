@@ -1,0 +1,39 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 my-5">ID: <%= instance._id %></h2>
+<div>
+  <p>
+    <strong>Title: </strong>
+    <span><%= instance.book.title%></span>
+  </p>
+  <p>
+    <strong>Imprint: </strong>
+    <span><%= instance.imprint %></span>
+  </p>
+  <p>
+    <strong>Status: </strong>
+    <% if(instance.status== 'Available') {%>
+    <span class="text-success"><%= instance.status %></span>
+    <% } else if (instance.status == 'Maintenance') {%>
+    <span class="text-danger"><%= instance.status %></span>
+    <% } else {%>
+    <span class="text-warning"><%= instance.status %></span>
+    <% } %>
+
+  </p>
+  <p>
+    <strong>Due Back: </strong>
+    <span><%= instance.due_back_formatted %></span>
+
+  </p>
+  <hr />
+  <form action="" method="POST">
+    <p class="mt-5"><strong>Are you sure you want to delete this book instance?</strong></p>
+    <input type="hidden" name="instanceid" value="<%= instance._id %>">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') -%>

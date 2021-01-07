@@ -1,0 +1,61 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<%- include('../partials/form-error') -%>
+<form action="" method="POST">
+
+  <div class="form-group">
+    <label for="book">Book:</label>
+    <select class="form-control" type="select" name="book" id="book" aria-placeholder="Select Author" required>
+      <% if(books) {%>
+      <% books.forEach(function(book) {%>
+      <option value="<%= book._id %>"
+        <%= (typeof book_instance!= 'undefined' && book._id.toString()==book_instance.book) ? 'selected' : '' %>>
+        <%= book.title %>
+      </option>
+      <% }) %>
+      <%}%>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="imprint">Imprint:</label>
+    <input class="form-control" type="text" name="imprint" id="imprint" placeholder="Tor Books, 11/22/2016, Hardcover" required
+      value="<%= typeof book_instance!='undefined' ? book_instance.imprint : '' %>">
+  </div>
+
+  <div class="form-group">
+    <label for="due_back">Date when book available:</label>
+    <input class="form-control" type="date" name="due_back" id="due_back" placeholder="22/03/2020"
+      value="<%= typeof book_instance!='undefined' ? book_instance.due_back : '' %>">
+  </div>
+
+  <div class="form-group">
+    <label for="status">Status:</label>
+    <select class="form-control" type="select" name="status" id="status" aria-placeholder="Select Status" required>
+      <option value="Available"
+        <%= (typeof book_instance!= 'undefined' && book_instance.status == 'Available') ? 'selected' : '' %>>
+        Available
+      </option>
+      <option value="Maintenance"
+        <%= (typeof book_instance!= 'undefined' && book_instance.status == 'Maintenance') ? 'selected' : '' %>>
+        Maintenance
+      </option>
+      <option value="Loaned"
+        <%= (typeof book_instance!= 'undefined' && book_instance.status == 'Loaned') ? 'selected' : '' %>>
+        Loaned
+      </option>
+      <option value="Reserved"
+        <%= (typeof book_instance!= 'undefined' && book_instance.status == 'Reserved') ? 'selected' : '' %>>
+        Reserved
+      </option>
+
+    </select>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<%- include('../partials/footer') -%>

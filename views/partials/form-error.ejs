@@ -1,0 +1,10 @@
+<!-- views/partials/form-footer.ejs -->
+<!-- This is not for user signup and signin forms -->
+<!-- Error messages for user creation form etc in flash-msg because used flash message for it. -->
+<% if(typeof errors != 'undefined'){ %>
+<ul class="errors alert alert-danger">
+  <% errors.forEach(function(error){ %>
+  <li><%= error.msg %></li>
+  <%}); %>
+</ul>
+<% } %>

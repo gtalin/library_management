@@ -1,0 +1,23 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<ul class="list-group">
+  <% if(data.genre_list.length!=0) { %>
+  <% data.genre_list.forEach(function(genre) {%>
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    <a href="<%= genre.url %>">
+      <%= genre.name %>
+    </a>
+    <span class="badge badge-primary badge-pill">
+      <%= genre.bookCount %>
+    </span>
+  </li>
+  <% }); %>
+  <% } else { %>
+  <li>No Genre data available </li>
+  <% } %>
+</ul>
+
+<%- include('../partials/footer') -%>

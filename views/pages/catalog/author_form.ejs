@@ -1,0 +1,32 @@
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header-n-side-nav') -%>
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<%- include('../partials/form-error') -%>
+
+<form action="" method="POST">
+  <div class="form-group">
+    <label for="fname">First Name:</label>
+    <input class="form-control" type="text" name="fname" id="fname" required placeholder="First Name"
+      value="<%= typeof author!='undefined' ? author.fname : '' %>">
+  </div>
+  <div class="form-group">
+    <label for="lname">Last Name:</label>
+    <input class="form-control" type="text" name="lname" id="lname" required placeholder="Last Name"
+      value="<%= typeof author !='undefined' ? author.lname : '' %>">
+  </div>
+  <div class="form-group">
+    <label for="dob">Date of Birth:</label>
+    <input class="form-control" type="date" name="dob" id="dob" placeholder="dd/mm/yyyy"
+      value=<%= typeof author !='undefined' && author.dob !='undefined' ? author.dob : '' %>>
+  </div>
+  <div class="form-group">
+    <label for="dod">Date of Death:</label>
+    <input class="form-control" type="date" name="dod" id="dod" placeholder="dd/mm/yyyy"
+      value=<%= typeof author !='undefined' && author.dod != 'undefined'  ? author.dod : '' %>>
+  </div>
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<%- include('../partials/footer') -%>
