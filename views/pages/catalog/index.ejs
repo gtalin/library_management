@@ -1,8 +1,8 @@
-<%- include('../partials/head') -%>
+<%- include('../../partials/head') -%>
 
-<%- include('../partials/header-n-side-nav') -%>
+<%- include('../../partials/header-n-side-nav') -%>
 
-<p class="lead">Welcome to <strong>LocalLibrary</strong> </p>
+<!-- <p class="lead">Welcome to <strong>LocalLibrary</strong> </p> -->
 <h2 class="h2 py-2 mt-5"><%= title %></h2>
 <% if (error != undefined) { %>
 <p>Error getting data from the database</p>
@@ -11,10 +11,11 @@
 <% } %>
 <ul class="list-group my-5">
   <li class="list-group-item"><strong>Books: </strong><%= data.book_count %></li>
-  <li class="list-group-item"><strong>Copies: </strong><%= data.book_instance_count %></li>
-  <li class="list-group-item"><strong>Copies Available: </strong><%= data.book_instance_available_count %></li>
   <li class="list-group-item"><strong>Authors: </strong><%= data.author_count %></li>
-  <li class="list-group-item"><strong>Genres: </strong><%= data.genre_count %></li>
+  <li class="list-group-item"><strong>Copies in Library: </strong><%= data.book_instance_count %></li>
+  <li class="list-group-item"><strong>Copies Available: </strong><%= data.book_instance_available_count %></li>
+  
+  <!-- <li class="list-group-item"><strong>Genres: </strong><%= data.genre_count %></li> -->
 </ul>
 
-<%- include('../partials/footer') -%>
+<%- include('../../partials/footer') -%>

@@ -11,7 +11,7 @@ const MongoStore = require('connect-mongo')(session);
 // const {setLoginStatus} = require('./middleware/userStatus');
 const indexRouter = require('./routes/index');
 // const userRouter = require('./routes/user');
-// const catalogRouter = require('./routes/catalog');
+const catalogRouter = require('./routes/catalog');
 const connectDB = require('./config/db');
 
 // General setup
@@ -22,7 +22,7 @@ const app = express();
 app.use(logger('dev'));
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views/pages'));
 app.set('view engine', 'ejs');
 
 app.use(express.json());
@@ -68,7 +68,7 @@ app.use(flash());
 
 app.use('/', indexRouter);
 // app.use('/user', userRouter);
-// app.use('/catalog', catalogRouter);
+app.use('/catalog', catalogRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

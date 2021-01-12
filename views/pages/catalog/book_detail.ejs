@@ -1,6 +1,6 @@
-<%- include('../partials/head') -%>
+<%- include('../../partials/head') -%>
 
-<%- include('../partials/header-n-side-nav') -%>
+<%- include('../../partials/header-n-side-nav') -%>
 
 
 <h2 class="h2 mt-5"><%= title %></h2>
@@ -13,18 +13,8 @@
   <strong>Summary: </strong>
   <%= data.bookDetails.summary %>
 </p>
-<p>
-  <strong>ISBN: </strong>
-  <%= data.bookDetails.isbn %>
-</p>
-<p>
-  <strong>Genre:</strong>&nbsp;
-  <% if (data.bookDetails.genre && data.bookDetails.genre.length!=0) {%>
-  <% data.bookDetails.genre.forEach(function(genre){ %>
-  <%= genre.name %> |
-  <% }) %>
-  <% } %>
-</p>
+
+
 <% } %>
 
 <hr />
@@ -74,4 +64,4 @@
 </div>
 
 
-<%- include('../partials/footer') -%>
+<%- include('../../partials/footer') -%>

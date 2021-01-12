@@ -1,17 +1,27 @@
-<%- include('../partials/head') -%>
+<%- include('../../partials/head') -%>
 
-<%- include('../partials/header-n-side-nav') -%>
+<%- include('../../partials/header-n-side-nav') -%>
 
 <h2 class="h2 my-5">ID: <%= instance._id %></h2>
 <div>
+  <p>
+    <strong>Internal Id: </strong>
+    <span><%= instance.id%></span>
+  </p>
   <p>
     <strong>Title: </strong>
     <span><%= instance.book.title%></span>
   </p>
   <p>
-    <strong>Imprint: </strong>
-    <span><%= instance.imprint %></span>
+    <strong>Publisher: </strong>
+    <span><%= instance.publisher.name %></span>
   </p>
+
+  <p>
+    <strong>Price: </strong>
+    <span><%= instance.price%></span>
+  </p>
+
   <p>
     <strong>Status: </strong>
     <% if(instance.status== 'Available') {%>
@@ -24,8 +34,8 @@
 
   </p>
   <p>
-    <strong>Due Back: </strong>
-    <span><%= instance.due_back_formatted %></span>
+    <strong>Date Purchased: </strong>
+    <span><%= instance.date_purchased %></span>
 
   </p>
   <hr />
@@ -36,4 +46,4 @@
   </form>
 </div>
 
-<%- include('../partials/footer') -%>
+<%- include('../../partials/footer') -%>

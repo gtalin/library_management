@@ -3,17 +3,13 @@
 <%- include('../../partials/header-n-side-nav') -%>
 
 
-<h2 class="h2 mt-3">Author: <%= author.name %></h2>
-<p>
-  (<%= author.dob_formatted %> -
-  <%= author.dod_formatted %>)
-</p>
+<h2 class="h2 mt-3">Publisher: <%= publisher.name %></h2>
 
 
 <% if(books && books.length!=0) { %>
 <div class="ml-3 mt-5">
   <div class="alert alert-danger" role="alert">
-    <strong>Delete the following books before attempting to delete the author
+    <strong>Delete the following book instances before attempting to delete the publisher
     </strong>
   </div>
   <h3>Books</h3>
@@ -34,9 +30,9 @@
 <% } else {%>
 <form action="" method="POST">
   <p class="mt-5">
-    <strong>Do you really want to delete this Author?</strong>
+    <strong>Do you really want to delete this Publisher?</strong>
   </p>
-  <input type="hidden" name="authorid" required value="<%= author._id %>">
+  <input type="hidden" name="publisherid" required value="<%= publisher._id %>">
   <button type="submit" class="btn btn-danger">Delete</button>
 </form>
 

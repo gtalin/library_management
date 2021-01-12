@@ -1,6 +1,6 @@
-<%- include('../partials/head') -%>
+<%- include('../../partials/head') -%>
 
-<%- include('../partials/header-n-side-nav') -%>
+<%- include('../../partials/header-n-side-nav') -%>
 
 <h2 class="h2 my-5">ID: <%= data.instance._id %></h2>
 <div>
@@ -8,10 +8,17 @@
     <strong>Title: </strong>
     <span><%= data.instance.book.title%></span>
   </p>
+
   <p>
-    <strong>Imprint: </strong>
-    <span><%= data.instance.imprint %></span>
+    <strong>Internal Id: </strong>
+    <span><%= data.instance.id%></span>
+  </p> 
+
+  <p>
+    <strong>Publisher: </strong>
+    <span><%= data.instance.publisher.name %></span>
   </p>
+
   <p>
     <strong>Status: </strong>
     <% if(data.instance.status== 'Available') {%>
@@ -21,11 +28,16 @@
     <% } else {%>
     <span class="text-warning"><%= data.instance.status %></span>
     <% } %>
-
   </p>
+
   <p>
-    <strong>Due Back: </strong>
-    <span><%= data.instance.due_back_formatted %></span>
+    <strong>Price (Rs): </strong>
+    <span><%= data.instance.price %></span>
+  </p>
+
+  <p>
+    <strong>Date Purchased: </strong>
+    <span><%= data.instance.date_purchased_formatted %></span>
 
   </p>
 
@@ -37,4 +49,4 @@
 
 </div>
 
-<%- include('../partials/footer') -%>
+<%- include('../../partials/footer') -%>

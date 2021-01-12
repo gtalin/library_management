@@ -2,22 +2,29 @@
 
 <%- include('../../partials/header-n-side-nav') -%>
 
+
 <h2 class="h2 mt-5"><%= title %></h2>
-<ul class="list-group">
-  <% if(data.genre_list.length!=0) { %>
-  <% data.genre_list.forEach(function(genre) {%>
+<ul class="list-group my-3">
+  <% if(data.publisher_list.length!=0) { %>
+  <% data.publisher_list.forEach(function(publisher) { %>
   <li class="list-group-item d-flex justify-content-between align-items-center">
-    <a href="<%= genre.url %>">
-      <%= genre.name %>
-    </a>
+    <div>
+      <a href="<%= publisher.url %>">
+        <%= publisher.name %>
+      </a> |
+      
+    </div>
+
     <span class="badge badge-primary badge-pill">
-      <%= genre.bookCount %>
+      <%= publisher.bookCount %>
     </span>
   </li>
   <% }); %>
   <% } else { %>
-  <li>No Genre data available </li>
+  <li>No publisher exists in the Database</li>
   <% } %>
 </ul>
+
+
 
 <%- include('../../partials/footer') -%>

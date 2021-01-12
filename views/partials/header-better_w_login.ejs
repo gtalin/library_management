@@ -8,16 +8,23 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav px-3 ml-auto">
-        
-        
+        <% if(login) {%>
+        <li class="nav-item ">
+          <a class="nav-link" href="/user/profile">
+            Welcome <%= user.first_name %>
+          </a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link" href="/user/logout">Sign out</a>
+        </li>
+        <% } else { %>
         <li class="nav-item ">
           <a class="nav-link" href="/user/signup">Sign Up</a>
         </li>
         <li class="nav-item ">
           <a class="nav-link" href="/user/signin">Sign In</a>
         </li>
-       
-
+        <% } %>
       </ul>
     </div>
   </div>

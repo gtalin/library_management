@@ -1,6 +1,6 @@
-<%- include('../partials/head') -%>
+<%- include('../../partials/head') -%>
 
-<%- include('../partials/header-n-side-nav') -%>
+<%- include('../../partials/header-n-side-nav') -%>
 
 
 <h2 class="h2 mt-5"><%= title %></h2>
@@ -11,7 +11,7 @@
   <% data.book_instance_list.forEach(function(book) { %>
   <li class="list-group-item">
     <a href="<%= book.url %>">
-      <%= book.book.title %> : <%= book.imprint %>
+      <%= book.book.title %> : <%= book.publisher.name %>
     </a>
     |
     <% if (book.status == 'Available') { %>
@@ -21,9 +21,7 @@
     <% } else { %>
     ( <span class="text-warning"><%= book.status %></span> )
     <% } %>
-    <% if(book.status != 'Available' ) { %>
-    <span>Due: <%= book.due_back_formatted %></span>
-    <% } %>
+    
   </li>
   <% }); %>
   <% } else  { %>
@@ -31,4 +29,4 @@
   <% } %>
 </ul>
 
-<%- include('../partials/footer') -%>
+<%- include('../../partials/footer') -%>
