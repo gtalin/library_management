@@ -1,0 +1,48 @@
+<div class="shop-pagination">
+  <ul class="pagination">
+ <% if (pageNum == 1 && pages > 1) { %>
+ <li class="page-item">
+  
+  <a class="page-link"
+  href="<%= url %>/<%= parseInt(pageNum) + 1 %>/?search=<%=searchQuery %>" aria-label="Next">
+  <span>
+   Page <%= parseInt(pageNum) + 1 %>
+   <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+  </span>
+  </a>
+
+ </li>
+ <% } else if (pageNum < pages) { %>
+ <li class="page-item">
+  <a class="page-link"
+  href="<%= url %>/<%= parseInt(pageNum) - 1 %>/?search=<%=searchQuery %>" aria-label="Previous"><span>
+    <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+    Page <%= parseInt(pageNum) - 1 %>
+  </span>
+  </a>
+ </li>
+ <li class="page-item">
+  <a class="page-link"
+  href="<%= url %>/<%= parseInt(pageNum) + 1 %>/?search=<%=searchQuery %>" aria-label="Next"><span>
+   Page <%= parseInt(pageNum) + 1 %>
+    <span aria-hidden="true">&raquo;</span>
+    <span class="sr-only">Next</span>
+  </span>
+  </a>
+ </li>
+ <% } else if (pageNum == pages && pages > 1) { %>
+ <li class="page-item">
+  <a class="page-link"
+  href="<%= url %>/<%= parseInt(pageNum) - 1 %>/?search=<%=searchQuery %>" aria-label="Previous"><span>
+    <span aria-hidden="true">&laquo;</span>
+    <span class="sr-only">Previous</span>
+    Page <%= parseInt(pageNum) - 1 %>
+  </span>
+  </span>
+  </a>
+ </li>
+ <% } %>
+ </ul>
+ </div>

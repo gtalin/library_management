@@ -3,7 +3,9 @@
 <%- include('../../partials/header-n-side-nav') -%>
 
 
-<h2 class="h2 mt-5"><%= title %></h2>
+<%- include('../../partials/search_form') -%>
+
+<h2 class="h2 mt-5"><%= title %> </h2>
 <ul class="list-group my-3">
 
 
@@ -17,8 +19,10 @@
     ( <%= book.author.name %> ) </li>
   <% }); %>
   <% } else  { %>
-  <li class="list-group-item">There are no books</li>
+  <li class="list-group-item">Sorry there are no books by your query in the database! </li>
   <% } %>
 </ul>
+
+<%- include('../../partials/pagination') -%>
 
 <%- include('../../partials/footer') -%>

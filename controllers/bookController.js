@@ -6,6 +6,8 @@ const Author = require('../models/author');
 // const Genre = require('../models/genre');
 const BookInstance = require('../models/bookinstance');
 
+const escapeRegex = require('../utilities/regex-escape');
+
 exports.index = async (req, res) => {
   let error;
   const data = {
@@ -36,12 +38,36 @@ exports.book_list = async (req, res) => {
   const data = {
     book_list: undefined,
   };
+  const resultsPerPage = 5; // results per page
+  const pageNum = req.params.page || 1; // Page
+  const searchQuery = req.query.search;
+  console.log(searchQuery);
+  const regex = searchQuery
+    ? new RegExp(escapeRegex(searchQuery), 'gi')
+    : new RegExp('');
+  console.log('search query ad the regEx are: ', regex, searchQuery);
+  let numOfBooks;
   try {
-    data.book_list = await Book.find({}, 'title author').populate('author');
+    data.book_list = await Book.find({ title: regex }, 'title author')
+      .skip(resultsPerPage * pageNum - resultsPerPage)
+      .limit(resultsPerPage)
+      .populate('author');
+
+    numOfBooks = await Book.countDocuments({ title: regex });
   } catch (error) {
     error = error;
   }
-  res.render('./catalog/book_list', { title: 'Book List', data, error });
+  res.render('./catalog/book_list', {
+    title: 'Book List',
+    search_title: 'books',
+    data,
+    searchQuery,
+    pageNum,
+    pages: Math.ceil(numOfBooks / resultsPerPage),
+    error,
+    numOfResults: numOfBooks,
+    url: '/catalog/books',
+  });
 };
 
 // Display detail page for a specific book.

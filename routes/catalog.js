@@ -37,6 +37,7 @@ router.get('/book/:id', bookController.book_detail);
 
 // GET request for list if all book items
 router.get('/books', bookController.book_list);
+router.get('/books/:page', bookController.book_list);
 
 //  /********* AUTHOR ROUTES *********/ //
 // GET request for creating a Author. NOTE this must come before routes that display Author (uses id)
@@ -61,7 +62,8 @@ router.post('/author/:id/update', authorController.author_update_post);
 router.get('/author/:id', authorController.author_detail);
 
 // GET request for list of all Author items
-router.get('/authors', authorController.author_list);
+router.get('/authors/', authorController.author_list);
+router.get('/authors/:page', authorController.author_list);
 
 // //  /********* GENRE ROUTES *********/ //
 // // GET request for creating a Genre. NOTE this must come before routes that display Genre (uses id)
@@ -112,6 +114,7 @@ router.get('/publisher/:id', publisherController.publisher_detail);
 
 // GET request for list of all publisher items
 router.get('/publishers', publisherController.publisher_list);
+router.get('/publishers/:page', publisherController.publisher_list);
 
 //  /********* BOOKINSTANCE ROUTES *********/ //
 // GET request for creating a BookInstance. NOTE this must come before routes that display BookInstance (uses id)
@@ -155,5 +158,6 @@ router.get('/bookinstance/:id', bookinstanceController.bookinstance_detail);
 
 // GET request for list of all BookInstance items
 router.get('/bookinstances', bookinstanceController.bookinstance_list);
+router.get('/bookinstances/:page', bookinstanceController.bookinstance_list);
 
 module.exports = router;
