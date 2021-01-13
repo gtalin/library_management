@@ -12,6 +12,7 @@ const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
 // const userRouter = require('./routes/user');
 const catalogRouter = require('./routes/catalog');
+const apiRouter = require('./routes/api');
 const connectDB = require('./config/db');
 
 // General setup
@@ -69,6 +70,7 @@ app.use(flash());
 app.use('/', indexRouter);
 // app.use('/user', userRouter);
 app.use('/catalog', catalogRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

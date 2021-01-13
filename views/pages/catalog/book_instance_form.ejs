@@ -4,27 +4,31 @@
 
 <h2 class="h2 mt-5"><%= title %></h2>
 <%- include('../../partials/form-error') -%>
-<form action="" method="POST">
+<form id="book-instance-form">
+<!-- <form action="" method="POST" id="book-instance-form"> -->
 
-  <div class="form-group">
+  <div id = "alert_placeholder"></div>
 
     <div class="form-group">
       <label for="id">Internal Id:</label>
       <input class="form-control" type="text" name="id" id="id" placeholder="100" required
-        value="<%= typeof book_instance!='undefined' ? book_instance.id : '' %>">
+        value="<%= typeof book_instance!='undefined' ? book_instance.id : '' %>" autocomplete="off" >
     </div>
 
-    <label for="book">Book:</label>
-    <select class="form-control" type="select" name="book" id="book" aria-placeholder="Select Book" required>
-      <% if(books) {%>
+    <div class="form-group">
+    <label for="book">Choose a Book:</label>
+    <input class="form-control" list="book-list" id="book" name="book"  required aria-placeholder="Select Book" value="<%= typeof book_instance!='undefined' ? book_instance.book.title : '' %>" autocomplete="off"/>
+    <datalist name="book-list" id="book-list" >
+    <!-- <select class="form-control" type="select" name="book" id="book" aria-placeholder="Select Book" required> -->
+      <!-- <% if(books) {%>
       <% books.forEach(function(book) {%>
-      <option value="<%= book._id %>"
+        <option value="<%= book.title %>"
         <%= (typeof book_instance!= 'undefined' && book._id.toString()==book_instance.book) ? 'selected' : '' %>>
-        <%= book.title %>
       </option>
       <% }) %>
-      <%}%>
-    </select>
+      <%}%> -->
+    <!-- </select> -->
+    </datalist>
   </div>
 
   <div class="form-group">
@@ -78,5 +82,114 @@
 
   <button class="btn btn-primary" type="submit">Submit</button>
 </form>
+
+<script>
+  function bookInstance() {
+    const bookInstanceForm = document.getElementById('book-instance-form');
+    const bookList = document.getElementById('book-list');
+    const book = document.getElementById('book');
+    const alertPlaceholder = document.getElementById("alert_placeholder");
+
+    let books = [];
+    let filteredBooks = [];
+    
+    fetch('/api/books')
+    .then(response => {console.log(response); return response.json()})
+    .then(data => {
+      console.log(data);
+      books = data.books;
+      return data;})
+    .catch((err) => {
+      console.log("There was some erro");
+    });
+
+    function handleInputChange(e) {
+      console.log(e.target.value);
+      let val = e.target.value;
+      filteredBooks = val.length !== 0 ? books.filter((book) => {
+          return book.title.toLowerCase().match(val.toLowerCase());
+      }) : [];
+      console.log("FilteredBooks", filteredBooks);
+      bookList.innerHTML = "";
+      filteredBooks.forEach(book => {
+        // const option = `<option value="${book.title}"></option>`
+        
+        let option = document.createElement('option');
+        option.value = book.title;
+        option.id = book._id;
+        bookList.appendChild(option);
+      });
+      
+    }
+    // for (book of books) {
+    //   console.log(book.title);
+    // }
+    // console.log(JSON.parse(JSON.stringify(books)));
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      console.log("form submitted");
+      const formData = new FormData(document.querySelector('form'))
+      const bookInstanceObj = {};
+      for (let pair of formData.entries()) {
+        console.log(pair);
+        bookInstanceObj[pair[0]] = pair[1];
+        // console.log(pair[0] + ': ' + pair[1]);
+      }
+      console.log(bookInstanceObj);
+      console.log(filteredBooks)
+      if (!filteredBooks.find((book) => book.title.toLowerCase() === bookInstanceObj['book'].trim().toLowerCase())){
+        console.log("Book not in database display an alert message");
+        const alertMsg = 'Book does not exist in the database. Add book to databse first';
+        alertPlaceholder.innerHTML = `<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>${alertMsg}</span></div>`
+      } else {
+        alertPlaceholder.innerHTML = '';
+        filteredBooks.forEach(book => {
+          if (book.title.toLowerCase() === bookInstanceObj['book'].trim().toLowerCase()) {
+            bookInstanceObj['book'] = book['_id'];
+          }
+        })
+        console.log(bookInstanceObj);
+
+        (async () => {
+          try {
+            const response = await fetch("/catalog/bookinstance/create", {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bookInstanceObj),
+            redirect: 'follow',
+          });
+
+            if (response.redirected) {
+              window.location.href = response.url;
+            }
+          } catch (error) {
+            console.log("An error occured in form submission");
+          }
+          
+        })();
+        // fetch("/catalog/bookinstance/create", {
+        //   method: "POST", 
+        //   body: JSON.stringify(bookInstanceObj)
+        // }).then(res => {
+        //   console.log("Request complete! response:", res);
+        // });
+      }
+      // TODO: Make sure bookInstanceObj['book'] is in filteredList. lowerCase, strip and full string
+      // Take id of book from filteredList and assign to bookInstanceObj['book']
+      // If book not in list, alert msg that book should be added to DB. 
+      // Make a POST request using fetch
+    }
+    
+    book.addEventListener('keyup', handleInputChange);
+    bookInstanceForm.addEventListener('submit', handleFormSubmit);
+
+  }
+
+  bookInstance();
+</script>
 
 <%- include('../../partials/footer') -%>
