@@ -3,7 +3,7 @@ const BookInstance = require('../models/bookinstance');
 
 const { isodateToString } = require('../utilities/stringmanipulation');
 const Book = require('../models/book');
-const Publisher = require('../models/publisher');
+// const Publisher = require('../models/publisher');
 
 // Display list of all BookInstances.
 exports.bookinstance_list = async (req, res) => {
@@ -12,9 +12,16 @@ exports.bookinstance_list = async (req, res) => {
     book_instance_list: undefined,
   };
   try {
-    data.book_instance_list = await BookInstance.find({})
-      .populate('book')
-      .populate('publisher');
+    // data.book_instance_list = await BookInstance.find({}).populate('book');
+    data.book_instance_list = await BookInstance.find({}).populate({
+      path: 'book',
+      select: 'title',
+      populate: {
+        path: 'author',
+      },
+    });
+    // .populate('author');
+    // .populate('publisher');
   } catch (error) {
     console.log('error is:', error);
     error = error;
@@ -33,9 +40,11 @@ exports.bookinstance_detail = async (req, res, next) => {
   };
 
   try {
-    const instance = await BookInstance.findById(req.params.id)
-      .populate({ path: 'book', select: 'title' })
-      .populate({ path: 'publisher', select: 'name' });
+    const instance = await BookInstance.findById(req.params.id).populate({
+      path: 'book',
+      select: 'title',
+    });
+    // .populate({ path: 'publisher', select: 'name' });
     // Only select the title field in book.
 
     data.instance = instance;
@@ -49,11 +58,11 @@ exports.bookinstance_detail = async (req, res, next) => {
 exports.bookinstance_create_get = async (req, res, next) => {
   try {
     const books = await Book.find().sort({ title: 1 });
-    const publishers = await Publisher.find().sort({ title: 1 });
+    // const publishers = await Publisher.find().sort({ title: 1 });
     res.render('./catalog/book_instance_form', {
       title: 'Create BookInstance',
       books,
-      publishers,
+      // publishers,
     });
   } catch (errors) {
     return next(error);
@@ -67,7 +76,7 @@ exports.bookinstance_create_post = [
       'Body details before validation',
       req.body.id,
       req.body.book,
-      req.body.publisher,
+      // req.body.publisher,
       req.body.price,
       req.body.status,
       req.body.date_purchased
@@ -80,10 +89,7 @@ exports.bookinstance_create_post = [
     .isLength({ min: 1 })
     .withMessage('Please add an internal Id'),
   check('book').trim().isLength({ min: 1 }).withMessage('Please select a book'),
-  check('book')
-    .trim()
-    .isLength({ min: 1 })
-    .withMessage('Please select a publisher'),
+  check('book').trim().isLength({ min: 1 }).withMessage('Please add a book'),
   check('price').isNumeric().withMessage('Must be a number'),
   check('date_purchased')
     .optional({ checkFalsy: true })
@@ -97,7 +103,7 @@ exports.bookinstance_create_post = [
   // Sanitize data
   body('id').escape(),
   body('book').escape(),
-  body('publisher').escape(),
+  // body('publisher').escape(),
   body('status').escape(),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -125,6 +131,7 @@ exports.bookinstance_create_post = [
       }
     } else {
       try {
+        console.log('Books instance in create is:', book_instance);
         await book_instance.save();
         req.flash('success', 'Book Instance created');
         res.redirect(book_instance.url);
@@ -138,9 +145,11 @@ exports.bookinstance_create_post = [
 // Display BookInstance delete form on GET.
 exports.bookinstance_delete_get = async (req, res, next) => {
   try {
-    const instance = await BookInstance.findById(req.params.id)
-      .populate({ path: 'book', select: 'title' })
-      .populate({ path: 'publisher', select: 'name' }); // populate title field of book field
+    const instance = await BookInstance.findById(req.params.id).populate({
+      path: 'book',
+      select: 'title',
+    });
+    // .populate({ path: 'publisher', select: 'name' }); // populate title field of book field
     res.render('./catalog/book_instance_delete', { instance });
   } catch (error) {
     next(error);
@@ -163,11 +172,12 @@ exports.bookinstance_delete_post = async (req, res, next) => {
 // Display BookInstance update form on GET.
 exports.bookinstance_update_get = async (req, res, next) => {
   try {
-    const book_instance = await BookInstance.findById(req.params.id)
-      .populate('book')
-      .populate('publisher');
-    const books = await Book.find();
-    const publishers = await Publisher.find();
+    const book_instance = await BookInstance.findById(req.params.id).populate(
+      'book'
+    );
+    // .populate('publisher');
+    // const books = await Book.find();
+    // const publishers = await Publisher.find();
     console.log('Book instance is:', book_instance);
     // const instanceForForm = {
     //   book: book_instance.book._id,
@@ -176,16 +186,15 @@ exports.bookinstance_update_get = async (req, res, next) => {
     // };
     // book: book_instance.book._id because form expects a book id
     if (book_instance.date_purchased) {
-      book_instance.date_purchased = isodateToString(
-        book_instance.date_purchased
-      );
+      book_instance.dp = isodateToString(book_instance.date_purchased);
+      console.log('Date purchased in book_instance is', book_instance.dp);
     }
-    console.log('Book instance is:', book_instance);
+    console.log('Book instance in update get is:', book_instance);
     res.render('./catalog/book_instance_form', {
       title: 'Update book instance',
       book_instance,
-      books,
-      publishers,
+      // books,
+      // publishers,
     });
   } catch (error) {
     next(error);
@@ -199,11 +208,8 @@ exports.bookinstance_update_post = [
     .trim()
     .isLength({ min: 1 })
     .withMessage('Please add an internal Id'),
-  check('book').trim().isLength({ min: 1 }).withMessage('Please select a book'),
-  check('book')
-    .trim()
-    .isLength({ min: 1 })
-    .withMessage('Please select a publisher'),
+  check('book').trim().isLength({ min: 1 }).withMessage('Please add a book'),
+  // check('book').trim().isLength({ min: 1 }).withMessage('Please select a book'),
   check('price').isNumeric().withMessage('Must be a number'),
   check('date_purchased')
     .optional({ checkFalsy: true })
@@ -217,7 +223,7 @@ exports.bookinstance_update_post = [
   // Sanitize data
   body('id').escape(),
   body('book').escape(),
-  body('publisher').escape(),
+  // body('publisher').escape(),
   body('status').escape(),
 
   async (req, res, next) => {
@@ -225,14 +231,14 @@ exports.bookinstance_update_post = [
     try {
       if (!errors.isEmpty()) {
         // if errors, re-render the form with errors
-        const books = await Book.find();
-        const publishers = await Publisher.find();
+        // const books = await Book.find();
+        // const publishers = await Publisher.find();
         res.render('./catalog/book_instance_form', {
           title: 'Update Book Instance',
           errors: errors.array(),
           book_instance: req.body,
-          books,
-          publishers,
+          // books,
+          // publishers,
         });
       } else {
         // if no errors: update instance, create flash message, redirect to its url page
@@ -246,6 +252,7 @@ exports.bookinstance_update_post = [
         // });
         const instance = new BookInstance(req.body);
         instance._id = req.params.id;
+        console.log('Book instance in update POST', instance);
         await BookInstance.findByIdAndUpdate(req.params.id, instance);
         req.flash('success', 'Book Instance updated');
         res.redirect(instance.url);

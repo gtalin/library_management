@@ -11,7 +11,8 @@
   <% data.book_instance_list.forEach(function(book) { %>
   <li class="list-group-item">
     <a href="<%= book.url %>">
-      <%= book.book.title %> : <%= book.publisher.name %>
+      <% console.log(book.book); %>
+      <%= book.book.title %> : <%= book.book.author.name %>
     </a>
     |
     <% if (book.status == 'Available') { %>

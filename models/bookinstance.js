@@ -6,7 +6,6 @@ const moment = require('moment');
 const BookInstanceSchema = new Schema({
   id: { type: String, required: true },
   book: { type: Schema.Types.ObjectId, ref: 'Book', required: true },
-  publisher: { type: Schema.Types.ObjectId, ref: 'Publisher', required: true },
   price: { type: Number, required: true },
   status: {
     type: String,

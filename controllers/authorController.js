@@ -107,6 +107,7 @@ exports.author_create_post = [
         date_of_death: req.body.dod,
       });
       try {
+        console.log('Author in create author POST is:', author);
         await author.save();
         req.flash('success', 'Author Created');
         res.redirect(author.url);
@@ -168,7 +169,7 @@ exports.author_update_get = async (req, res, next) => {
     if (author.date_of_death) {
       authorForForm.dod = isodateToString(author.date_of_death);
     }
-    console.log(authorForForm);
+    console.log('Author form update author get', authorForForm);
     res.render('./catalog/author_form', {
       title: 'Update Author',
       author: authorForForm,
@@ -235,6 +236,7 @@ exports.author_update_post = [
         newAuthor.date_of_death = isodateToString(req.body.dod);
       }
       try {
+        console.log('Author in update author POST is:', newAuthor);
         await Author.findByIdAndUpdate(req.params.id, newAuthor);
         req.flash('success', 'Author updated');
         res.redirect(newAuthor.url);
