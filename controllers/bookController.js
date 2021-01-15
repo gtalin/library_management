@@ -81,11 +81,11 @@ exports.book_detail = async (req, res, next) => {
   try {
     const bookDetails = await Book.findById(req.params.id).populate('author');
     // .populate('genre');
-    // const bookInstances = await BookInstance.find({ book: req.params.id });
+    const bookInstances = await BookInstance.find({ book: req.params.id });
 
     title += bookDetails.title;
     data.bookDetails = bookDetails;
-    // data.bookInstances = bookInstances;
+    data.bookInstances = bookInstances;
   } catch (error) {
     console.log(error);
 
@@ -139,18 +139,11 @@ exports.book_create_post = [
     .trim()
     .isLength({ min: 1 })
     .withMessage('Author must not be empty'),
-  // check('summary')
-  //   .trim()
-  //   .isLength({ min: 1 })
-  //   .withMessage('Summary must not be empty'),
-  // check('isbn')
-  //   .trim()
-  //   .isLength({ min: 1 })
-  //   .withMessage('ISBN must not be empty'),
+
   // Sanitize fields (using wild card)
   body('title').escape(),
   body('author').escape(),
-  // body('genre').escape(),
+  body('publisher').escape(),
   body('summary').escape(),
   // body('isbn').escape(),
 
@@ -162,17 +155,17 @@ exports.book_create_post = [
       'Book details:',
       req.body.title,
       req.body.author,
-      req.body.summary
-      // req.body.isbn,
+      req.body.summary,
+      req.body.publisher
       // req.body.genre
     );
-    const book = new Book({
-      title: req.body.title,
-      author: req.body.author,
-      summary: req.body.summary,
-      // isbn: req.body.isbn,
-      // genre: req.body.genre,
-    });
+    // const book = new Book({
+    //   title: req.body.title,
+    //   author: req.body.author,
+    //   summary: req.body.summary,
+    //   publisher: req.body.publisher,
+    // });
+    const book = new Book(req.body);
 
     if (!errors.isEmpty()) {
       // re-render the form with the entered values
@@ -197,13 +190,6 @@ exports.book_create_post = [
       }
     } else {
       try {
-        // const book = new Book({
-        //   title: req.body.title,
-        //   author: req.body.author,
-        //   summary: req.body.summary,
-        //   isbn: req.body.isbn,
-        //   genre: req.body.genre
-        // });
         await book.save();
         req.flash('success', 'Book Created');
         res.redirect(book.url);
@@ -250,21 +236,11 @@ exports.book_delete_post = async (req, res, next) => {
 exports.book_update_get = async (req, res, next) => {
   try {
     const bookid = req.params.id;
-    const book = await Book.findById(bookid)
-      .populate('author')
-      .populate('genre');
+    const book = await Book.findById(bookid).populate('author');
+    // .populate('genre');
 
     const authors = await Author.find();
-    // const genres = await Genre.find();
-    // for (let genreIx = 0; genreIx < genres.length; genreIx++) {
-    //   for (let bookGIx = 0; bookGIx < book.genre.length; bookGIx++) {
-    //     if (
-    //       genres[genreIx]._id.toString() == book.genre[bookGIx]._id.toString()
-    //     ) {
-    //       genres[genreIx].checked = 'true';
-    //     }
-    //   }
-    // }
+
     res.render('./catalog/book_form', {
       title: 'Update Book',
       authors,
@@ -307,7 +283,7 @@ exports.book_update_post = [
   body('title').escape(),
   body('author').escape(),
   body('summary').escape(),
-  // body('isbn').escape(),
+  body('publisher').escape(),
   // body('genre.*').escape(),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -315,7 +291,7 @@ exports.book_update_post = [
       title: req.body.title,
       author: req.body.author,
       summary: req.body.summary,
-      // isbn: req.body.isbn,
+      publisher: req.body.publisher,
       // genre: req.body.genre,
       _id: req.params.id,
     });

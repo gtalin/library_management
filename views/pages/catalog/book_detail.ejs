@@ -10,8 +10,17 @@
   <%= data.bookDetails.author.name %>
 </p>
 <p>
+  <strong>Publisher: </strong>
+  <%= data.bookDetails.publisher %>
+</p>
+<p>
   <strong>Summary: </strong>
   <%= data.bookDetails.summary %>
+</p>
+
+<p>
+  <strong>Number of copies of the book: </strong>
+  <%= data.bookInstances.length %>
 </p>
 
 
@@ -25,6 +34,12 @@
   <% data.bookInstances.forEach(function(instance) { %>
 
   <hr />
+
+  <p>
+    <strong>Internal Id: </strong>
+    <%= instance.id %>
+  </p>
+
   <% if(instance.status== 'Available') {%>
   <p class="text-success"><%= instance.status %></p>
   <% } else if (instance.status== 'Maintenance') {%>
@@ -34,9 +49,10 @@
   <% } %>
 
   <p>
-    <strong>Imprint: </strong>
-    <%= instance.imprint %>
+    <strong>Date purchased: </strong>
+    <%= instance.date_purchased_formatted %>
   </p>
+
   <% if(instance.status!='Available') {%>
   <p>
     <strong>Due back: </strong>

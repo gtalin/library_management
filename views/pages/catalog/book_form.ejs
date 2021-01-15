@@ -31,6 +31,13 @@
   </div>
 
   <div class="form-group">
+    <label for="publisher">Publisher:</label>
+    <input class="form-control" name="publisher" id="publisher"
+      placeholder="Enter publisher of the book" value="<%= typeof book!='undefined' && book.publisher != undefined ? book.publisher : '' %>" 
+      />
+  </div>
+
+  <div class="form-group">
     <label for="summary">Summary:</label>
     <textarea class="form-control" name="summary" id="summary" rows="3"
       placeholder="Enter summary of the book"><%= typeof book!='undefined' && book.summary != undefined ? book.summary : '' %></textarea>
