@@ -3,6 +3,8 @@ const BookInstance = require('../models/bookinstance');
 
 const { isodateToString } = require('../utilities/stringmanipulation');
 const Book = require('../models/book');
+const escapeRegex = require('../utilities/regex-escape');
+
 // const Publisher = require('../models/publisher');
 
 // Display list of all BookInstances.
@@ -11,25 +13,116 @@ exports.bookinstance_list = async (req, res) => {
   const data = {
     book_instance_list: undefined,
   };
+  const resultsPerPage = 5; // results per page
+  const pageNum = req.params.page || 1; // Page
+  const searchQuery = req.query.search;
+  // const searchQuery = 'the';
+
+  const regex = searchQuery
+    ? new RegExp(escapeRegex(searchQuery), 'gi')
+    : new RegExp('');
+  console.log(
+    'search query ad the regEx are: ',
+    searchQuery,
+
+    regex
+  );
+  let numOfBookInstances;
   try {
     // data.book_instance_list = await BookInstance.find({}).populate('book');
-    data.book_instance_list = await BookInstance.find({}).populate({
-      path: 'book',
-      select: 'title',
-      populate: {
-        path: 'author',
+
+    // data.book_instance_list = await BookInstance.find({})
+    //   .skip(resultsPerPage * pageNum - resultsPerPage)
+    //   .limit(resultsPerPage)
+    //   .populate({
+    //     path: 'book',
+    //     select: 'title',
+    //     populate: {
+    //       path: 'author',
+    //     },
+    //   });
+
+    data.book_instance_list = await BookInstance.aggregate([
+      {
+        $lookup: {
+          from: 'books',
+          localField: 'book',
+          foreignField: '_id',
+          as: 'book',
+        },
       },
-    });
-    // .populate('author');
-    // .populate('publisher');
+      // {
+      //   $unwind: {
+      //     path: '$book',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+      { $unwind: '$book' },
+      // {
+      //   $unwind: {
+      //     path: '$book',
+      //   },
+      // },
+      { $match: { 'book.title': regex } },
+      {
+        $lookup: {
+          from: 'authors',
+          localField: 'book.author',
+          foreignField: '_id',
+          as: 'book.author_name',
+        },
+      },
+
+      { $skip: resultsPerPage * pageNum - resultsPerPage },
+      { $limit: resultsPerPage },
+    ]);
+
+    // console.log(data.book_instance_list);
+
+    // find({})
+    //   .skip(resultsPerPage * pageNum - resultsPerPage)
+    //   .limit(resultsPerPage)
+    //   .populate({
+    //     path: 'book',
+    //     select: 'title',
+    //     populate: {
+    //       path: 'author',
+    //     },
+    //   });
+
+    const bookCount = await BookInstance.aggregate([
+      {
+        $lookup: {
+          from: 'books',
+          localField: 'book',
+          foreignField: '_id',
+          as: 'book',
+        },
+      },
+      { $unwind: '$book' },
+      { $match: { 'book.title': regex } },
+      {
+        $count: 'total_copies',
+      },
+    ]);
+
+    numOfBookInstances = bookCount[0].total_copies;
+
+    console.log('Number of book instances', bookCount, numOfBookInstances);
   } catch (error) {
     console.log('error is:', error);
     error = error;
   }
   res.render('./catalog/book_instance_list', {
     title: 'Book Instance List',
+    search_title: 'book copies',
     data,
+    searchQuery,
+    pageNum,
+    pages: Math.ceil(numOfBookInstances / resultsPerPage),
     error,
+    numOfResults: numOfBookInstances,
+    url: '/catalog/bookinstances',
   });
 };
 
