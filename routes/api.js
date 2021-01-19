@@ -5,5 +5,6 @@ const apiController = require('../controllers/apiController');
 
 // API GET request for list if all book items in json
 router.get('/books', apiController.book_list);
+router.get('/authors', apiController.author_list);
 
 module.exports = router;

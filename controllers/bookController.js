@@ -106,11 +106,11 @@ exports.book_detail = async (req, res, next) => {
 // Display book create form on GET.
 exports.book_create_get = async (req, res, next) => {
   try {
-    const authors = await Author.find();
+    // const authors = await Author.find();
     // const genres = await Genre.find();
     res.render('./catalog/book_form', {
       title: 'Create Book',
-      authors,
+      // authors,
       // genres,
     });
   } catch (error) {
@@ -239,11 +239,11 @@ exports.book_update_get = async (req, res, next) => {
     const book = await Book.findById(bookid).populate('author');
     // .populate('genre');
 
-    const authors = await Author.find();
+    // const authors = await Author.find();
 
     res.render('./catalog/book_form', {
       title: 'Update Book',
-      authors,
+      // authors,
       // genres,
       book,
     });
