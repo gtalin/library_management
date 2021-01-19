@@ -29,20 +29,7 @@ exports.bookinstance_list = async (req, res) => {
   );
   let numOfBookInstances;
   try {
-    // data.book_instance_list = await BookInstance.find({}).populate('book');
-
-    // data.book_instance_list = await BookInstance.find({})
-    //   .skip(resultsPerPage * pageNum - resultsPerPage)
-    //   .limit(resultsPerPage)
-    //   .populate({
-    //     path: 'book',
-    //     select: 'title',
-    //     populate: {
-    //       path: 'author',
-    //     },
-    //   });
-
-    data.book_instance_list = await BookInstance.aggregate([
+    const result = await BookInstance.aggregate([
       {
         $lookup: {
           from: 'books',
@@ -51,18 +38,7 @@ exports.bookinstance_list = async (req, res) => {
           as: 'book',
         },
       },
-      // {
-      //   $unwind: {
-      //     path: '$book',
-      //     preserveNullAndEmptyArrays: true,
-      //   },
-      // },
       { $unwind: '$book' },
-      // {
-      //   $unwind: {
-      //     path: '$book',
-      //   },
-      // },
       { $match: { 'book.title': regex } },
       {
         $lookup: {
@@ -72,43 +48,25 @@ exports.bookinstance_list = async (req, res) => {
           as: 'book.author_name',
         },
       },
-
-      { $skip: resultsPerPage * pageNum - resultsPerPage },
-      { $limit: resultsPerPage },
-    ]);
-
-    // console.log(data.book_instance_list);
-
-    // find({})
-    //   .skip(resultsPerPage * pageNum - resultsPerPage)
-    //   .limit(resultsPerPage)
-    //   .populate({
-    //     path: 'book',
-    //     select: 'title',
-    //     populate: {
-    //       path: 'author',
-    //     },
-    //   });
-
-    const bookCount = await BookInstance.aggregate([
       {
-        $lookup: {
-          from: 'books',
-          localField: 'book',
-          foreignField: '_id',
-          as: 'book',
+        $facet: {
+          metadata: [{ $count: 'total' }],
+          data: [
+            { $skip: resultsPerPage * pageNum - resultsPerPage },
+            { $limit: resultsPerPage },
+          ], // add projection here wish you re-shape the docs
         },
       },
-      { $unwind: '$book' },
-      { $match: { 'book.title': regex } },
-      {
-        $count: 'total_copies',
-      },
+      // { $skip: resultsPerPage * pageNum - resultsPerPage },
+      // { $limit: resultsPerPage },
     ]);
 
-    numOfBookInstances = bookCount[0].total_copies;
+    console.log(result);
+    data.book_instance_list = result[0].data;
 
-    console.log('Number of book instances', bookCount, numOfBookInstances);
+    console.log(result[0].metadata);
+    numOfBookInstances = result[0].metadata[0].total;
+    console.log(numOfBookInstances);
   } catch (error) {
     console.log('error is:', error);
     error = error;
