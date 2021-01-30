@@ -1,10 +1,10 @@
-const { check, validationResult, body } = require('express-validator');
+// const { check, validationResult, body } = require('express-validator');
 
-const { name } = require('ejs');
+// const { name } = require('ejs');
 const Book = require('../models/book');
 const Author = require('../models/author');
 // const Genre = require('../models/genre');
-const BookInstance = require('../models/bookinstance');
+// const BookInstance = require('../models/bookinstance');
 
 /** ********
  **** controller for all api related routes ****
