@@ -1,0 +1,35 @@
+<%- include('../../partials/head') -%>
+
+<%- include('../../partials/header-n-side-nav') -%>
+
+
+<h2 class="h2 mt-5"><%= title %></h2>
+<% if (data.borrowerDetails) {%>
+<p>
+  <strong>Name: </strong>
+  <%= data.borrowerDetails.name %>
+</p>
+<p>
+  <strong>Mobile Number: </strong>
+  <%= data.borrowerDetails.mobileNumber %>
+</p>
+<p>
+  <strong>Address: </strong>
+  <%= data.borrowerDetails.address %>
+</p>
+
+
+<% } %>
+
+<hr />
+
+<div class="ml-3 mt-5">
+  
+  <p>
+    <a class="btn btn-danger" href="<%=data.borrowerDetails.url+'/delete'%>">Delete borrower</a>
+    <a class="btn btn-primary" href="<%=data.borrowerDetails.url+'/update'%>">Update borrower</a>
+  </p>
+</div>
+
+
+<%- include('../../partials/footer') -%>

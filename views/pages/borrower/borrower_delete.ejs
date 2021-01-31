@@ -1,0 +1,33 @@
+<%- include('../../partials/head') -%>
+
+<%- include('../../partials/header-n-side-nav') -%>
+
+
+<h2 class="h2 mt-5">Borrower Details%></h2>
+<% if (borrower) {%>
+<p>
+  <strong>Name: </strong>
+  <%= borrower.name %>
+</p>
+<p>
+  <strong>Mobile Number: </strong>
+  <%= borrower.mobileNumber %>
+</p>
+<p>
+  <strong>Address: </strong>
+  <%= borrower.address %>
+</p>
+
+<% } %>
+
+<form action="" method="POST">
+  <p class="mt-5">
+    <strong>
+      Are you sure you want to delete this borrower?
+    </strong>
+  </p>
+  <input type="hidden" name="borrowerid" value="<%= borrower._id %>">
+  <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+
+<%- include('../../partials/footer') -%>

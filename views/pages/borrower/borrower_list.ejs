@@ -1,0 +1,28 @@
+<%- include('../../partials/head') -%>
+
+<%- include('../../partials/header-n-side-nav') -%>
+
+
+<%- include('../../partials/search_form') -%>
+
+<h2 class="h2 mt-5"><%= title %> </h2>
+<ul class="list-group my-3">
+
+
+  <% if (data.borrower_list && data.borrower_list.length != 0) { %>
+  <% data.borrower_list.forEach(function(borrower) { %>
+  <li class="list-group-item">
+    <a href="<%= borrower.url %>">
+      <%= borrower.name %>
+    </a>
+    |
+    (Mobile Number: <%= borrower.mobileNumber %> ) </li>
+  <% }); %>
+  <% } else  { %>
+  <li class="list-group-item">Sorry there are no borrowers matching your query in the database! </li>
+  <% } %>
+</ul>
+
+<%- include('../../partials/pagination') -%>
+
+<%- include('../../partials/footer') -%>
