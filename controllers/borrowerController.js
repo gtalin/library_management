@@ -5,7 +5,6 @@ const Borrower = require('../models/borrower');
 
 const escapeRegex = require('../utilities/regex-escape');
 
-// TODO: this is yet to be done
 // Display list of all borrowers.
 exports.borrower_list = async (req, res) => {
   let error;

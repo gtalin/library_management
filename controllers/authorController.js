@@ -4,8 +4,47 @@ const {
   isodateToString,
 } = require('../utilities/stringmanipulation');
 
+const escapeRegex = require('../utilities/regex-escape');
+
 const Author = require('../models/author');
 const Book = require('../models/book');
+
+// exports.borrower_list = async (req, res) => {
+//   let error;
+//   const data = {
+//     borrower_list: undefined,
+//   };
+//   const resultsPerPage = 5; // results per page
+//   const pageNum = req.params.page || 1; // Page
+//   const searchQuery = req.query.search;
+//   console.log(searchQuery);
+//   const regex = searchQuery
+//     ? new RegExp(escapeRegex(searchQuery), 'gi')
+//     : new RegExp('');
+//   console.log('search query and the regEx are: ', regex, searchQuery);
+//   let numOfBorrowers;
+//   try {
+//     data.borrower_list = await Borrower.find({ name: regex })
+//       .skip(resultsPerPage * pageNum - resultsPerPage)
+//       .limit(resultsPerPage);
+
+//     numOfBorrowers = await Borrower.countDocuments({ name: regex });
+//   } catch (error) {
+//     error = error;
+//   }
+//   res.render('./borrower/borrower_list', {
+//     title: 'Borrower List',
+//     search_title: 'borrowers',
+//     data,
+//     searchQuery,
+//     pageNum,
+//     pages: Math.ceil(numOfBorrowers / resultsPerPage),
+//     error,
+//     numOfResults: numOfBorrowers,
+//     // url: '/catalog/books',
+//     url: '/borrower/borrowers',
+//   });
+// };
 
 // Display list of all Authors.
 exports.author_list = async (req, res, next) => {
@@ -14,20 +53,64 @@ exports.author_list = async (req, res, next) => {
     author_list: [],
     bookCount: [],
   };
+
+  const resultsPerPage = 5; // results per page
+  const pageNum = req.params.page || 1; // Page
+  const searchQuery = req.query.search;
+  console.log(searchQuery);
+  const regex = searchQuery
+    ? new RegExp(escapeRegex(searchQuery), 'gi')
+    : new RegExp('');
+  console.log('search query and the regEx are: ', regex, searchQuery);
+  let numOfAuthors;
   try {
-    data.author_list = await Author.find();
-    // Use method defined on AuthorSchema to get bookCount
+    // data.author_list = await Author.find({
+    //   first_name: regex,
+    // })
+    data.author_list = await Author.find({
+      $or: [{ first_name: regex }, { family_name: regex }],
+    })
+      .skip(resultsPerPage * pageNum - resultsPerPage)
+      .limit(resultsPerPage);
+
+    numOfAuthors = await Author.countDocuments({
+      $or: [{ first_name: regex }, { family_name: regex }],
+    });
+
     for (let i = 0; i < data.author_list.length; i++) {
       const author = data.author_list[i];
       const count = await author.getBookCount();
       data.author_list[i].bookCount = count;
     }
   } catch (error) {
-    console.log('error is:', error);
     error = error;
-    return next(error);
   }
-  res.render('./catalog/author_list', { title: 'Author List', error, data });
+  res.render('./catalog/author_list', {
+    title: 'Author List',
+    search_title: 'Authors',
+    data,
+    searchQuery,
+    pageNum,
+    pages: Math.ceil(numOfAuthors / resultsPerPage),
+    error,
+    numOfResults: numOfAuthors,
+    // url: '/catalog/books',
+    url: '/catalog/authors',
+  });
+  // try {
+  //   data.author_list = await Author.find();
+  //   // Use method defined on AuthorSchema to get bookCount
+  //   for (let i = 0; i < data.author_list.length; i++) {
+  //     const author = data.author_list[i];
+  //     const count = await author.getBookCount();
+  //     data.author_list[i].bookCount = count;
+  //   }
+  // } catch (error) {
+  //   console.log('error is:', error);
+  //   error = error;
+  //   return next(error);
+  // }
+  // res.render('./catalog/author_list', { title: 'Author List', error, data });
 };
 
 // Display detail page for a specific Author.
