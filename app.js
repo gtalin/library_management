@@ -11,10 +11,12 @@ const MongoStore = require('connect-mongo')(session);
 // const {setLoginStatus} = require('./middleware/userStatus');
 const indexRouter = require('./routes/index');
 // const userRouter = require('./routes/user');
+const adminRouter = require('./routes/admin');
 const catalogRouter = require('./routes/catalog');
 const borrowerRouter = require('./routes/borrower');
 const apiRouter = require('./routes/api');
 const connectDB = require('./config/db');
+const { checkIfAuth } = require('./middleware/checkIfAuth');
 
 // General setup
 dotenv.config();
@@ -68,8 +70,13 @@ app.use(flash());
 // app.use(passport.initialize());
 // app.use(passport.session());
 
+// Middleware before accessing any routes to set the
+// value for isLoggedIn
+app.use(checkIfAuth);
+
 app.use('/', indexRouter);
 // app.use('/user', userRouter);
+app.use('/admin', adminRouter);
 app.use('/catalog', catalogRouter);
 app.use('/borrower', borrowerRouter);
 app.use('/api', apiRouter);

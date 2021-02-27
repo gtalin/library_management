@@ -9,16 +9,46 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav px-3 ml-auto">
         
-        
-        <li class="nav-item ">
+        <!-- <li class="nav-item ">
           <a class="nav-link" href="/user/signup">Sign Up</a>
-        </li>
-        <li class="nav-item ">
+        </li> -->
+        <!-- <li class="nav-item ">
           <a class="nav-link" href="/user/signin">Sign In</a>
-        </li>
-       
+        </li> -->
+
+        <%if (isLoggedIn) { %>
+          <li class="nav-item ">
+            <button class="btn btn-primary" href="" id="logout">Logout</button>
+          </li>
+        <% } else {%>
+          <li class="nav-item ">
+            <a class="btn btn-primary" href="/admin/login">Login</a>
+          </li>
+        <% } %>
 
       </ul>
     </div>
   </div>
 </nav>
+
+<script src="/javascripts/logout.js"></script>
+
+<!-- <script>
+  const logoutLink = document.getElementById("logout");
+  logoutLink.addEventListener("click", handleLogoutClick);
+
+  function handleLogoutClick() {
+    const url = 'http://localhost:5000/admin/dashboard'
+    const login = 'fakeUser';
+    const pass = 'randomPassword';
+    var http = new XMLHttpRequest();						
+    http.open("get", url, false, login, pass);
+    http.send("");
+    if (http.status === 401) {
+      alert("You're logged out now");
+      window.location.href = "/catalog";
+    } else {
+      alert("Logout failed");
+    }	
+  }
+</script> -->

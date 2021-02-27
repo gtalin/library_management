@@ -9,10 +9,10 @@
   <div class="col-md-6 offset-md-3">
     <%- include('../../partials/flash-msg') -%>
     <h2 class="h2 mt-5"><%= title %></h2>
-    <form action="" method="POST">
+    <form id="login-form">
       <div class="form-group">
-        <label for="email">Email:</label>
-        <input class="form-control" type="text" name="email" id="email" placeholder="Email">
+        <label for="username">Username:</label>
+        <input class="form-control" type="text" name="username" id="username" placeholder="username">
       </div>
 
       <div class="form-group">
@@ -24,5 +24,4 @@
   </div>
 </div>
 
-
-<%- include('../../partials/footer') -%>
+<script src="/javascripts/login.js"></script>

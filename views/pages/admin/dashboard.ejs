@@ -1,0 +1,23 @@
+<%- include('../../partials/head') -%>
+
+<%- include('../../partials/header-n-side-nav') -%>
+<h2 class="h2 py-2 my-3"><%= title %></h2>
+<p class="lead mb-3">Welcome
+<strong>
+  <%= user? user : '' %>
+</strong> </p>
+<ul class="list-group my-5">
+  <li class="list-group-item" ><strong>Total number of books:</strong>
+    <%= numOfBookCopies? numOfBookCopies : '' %>
+  </li>
+  <li class="list-group-item"><strong>Books issued:</strong>
+    <%= booksIssued? booksIssued : '' %>
+  </li> 
+  <li class="list-group-item"><strong>Books available:</strong>
+    <%= booksAvailable? booksAvailable : '' %>
+  </li> 
+</ul>
+
+  
+
+<%- include('../../partials/footer') -%>
