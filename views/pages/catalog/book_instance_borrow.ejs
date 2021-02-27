@@ -1,0 +1,141 @@
+<%- include('../../partials/head') -%>
+
+<%- include('../../partials/header-n-side-nav') -%>
+<h2 class="h2 mt-5"><%= title %></h2>
+<% console.log(book_instance) %>
+<%- include('../../partials/form-error') -%>
+<h3 class="mt-4 mb-5">Title of book to borrow: <%= book_instance.book.title %></h3>
+<form id="book-borrower-form">
+<!-- <form action="" method="POST" id="book-instance-form"> -->
+
+  <div id = "alert_placeholder"></div>
+
+    <div class="form-group">
+    <label for="borrower">Choose a borrower:</label>
+    <input class="form-control" list="borrower-list" id="borrower" name="borrower"  required aria-placeholder="Select borrower" value="<%= typeof book_instance!='undefined' && book_instance.borrower ? book_instance.borrower : '' %>" autocomplete="off"/>
+    <datalist name="borrower-list" id="borrower-list" >
+    
+    </datalist>
+  </div>
+
+  <div class="form-group">
+    <label for="date_borrowed">Date when book borrowed:</label>
+    <input class="form-control" type="date" name="date_borrowed" id="date_borrowed" required placeholder="22/03/2020"
+      value="<%= typeof book_instance!='undefined' && book_instance.date_borrowed ? book_instance.db : '' %>">
+  </div>
+
+  
+  <button class="btn btn-primary" type="submit">Submit</button>
+</form>
+
+<script>
+  function borrower() {
+    const borrowerForm = document.getElementById('book-borrower-form');
+    const borrowerList = document.getElementById('borrower-list');
+    const borrower = document.getElementById('borrower');
+    const alertPlaceholder = document.getElementById("alert_placeholder");
+
+    let borrowers = [];
+    let filteredBorrowers = [];
+    
+    fetch('/api/borrowers')
+    .then(response => {console.log(response); return response.json()})
+    .then(data => {
+      console.log(data);
+      borrowers = data.borrowers;
+      return data;})
+    .catch((err) => {
+      console.log("There was some erro");
+    });
+
+    function handleInputChange(e) {
+      console.log(e.target.value);
+      let val = e.target.value;
+      filteredBorrowers = val.length !== 0 ? borrowers.filter((borrower) => {
+          return borrower.name.toLowerCase().match(val.toLowerCase());
+      }) : [];
+      console.log("FilteredBorrowers", filteredBorrowers);
+      borrowerList.innerHTML = "";
+      filteredBorrowers.forEach(borrower => {
+        // const option = `<option value="${book.title}"></option>`
+        
+        let option = document.createElement('option');
+        option.value = borrower.name;
+        option.id = borrower._id;
+        borrowerList.appendChild(option);
+      });
+      
+    }
+    
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      console.log("form submitted");
+      const formData = new FormData(document.querySelector('form'))
+      const borrowerObj = {};
+      for (let pair of formData.entries()) {
+        console.log(pair);
+        if (pair[1]) {
+          borrowerObj[pair[0]] = pair[1];
+        } else {
+          borrowerObj[pair[0]] = undefined;
+        }
+        
+      }
+      // if (borrowerObj['date_purchased'])
+      console.log(borrowerObj);
+      console.log(filteredBorrowers)
+      if (!borrowers.find((borrower) => borrower.name.toLowerCase() === borrowerObj['borrower'].trim().toLowerCase())){
+        console.log("Borrower not in database display an alert message");
+        const alertMsg = 'Borrower does not exist in the database. Add borrower to databse first';
+        alertPlaceholder.innerHTML = `<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>${alertMsg}</span></div>`
+      } else {
+        alertPlaceholder.innerHTML = '';
+        borrowers.forEach(borrower => {
+          if (borrower.name.toLowerCase() === borrowerObj['borrower'].trim().toLowerCase()) {
+            borrowerObj['borrower'] = borrower['_id'];
+          }
+        })
+        console.log(borrowerObj);
+
+        (async () => {
+          try {
+            // will call a fetch for creating a borrower and based on whether the borrower is updated or created, call the appropriate route. 
+            
+            const currentPageUrl = window.location.href;
+            // rather than hardcoding url in fetch
+            // as '/catalog/borrower/create'
+            // and checking whether to make a create or update request
+            
+            console.log("current page url is", currentPageUrl);
+            const response = await fetch(currentPageUrl, {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(borrowerObj),
+            // redirect: 'follow',
+            });
+
+            if (response.redirected) {
+              window.location.href = response.url;
+            }
+          } catch (error) {
+            console.log("An error occured in form submission");
+          }
+          
+        })();
+        
+      }
+      
+    }
+    
+    borrower.addEventListener('keyup', handleInputChange);
+    borrowerForm.addEventListener('submit', handleFormSubmit);
+
+  }
+
+  borrower();
+</script>
+
+<%- include('../../partials/footer') -%>

@@ -111,9 +111,15 @@
       const bookInstanceObj = {};
       for (let pair of formData.entries()) {
         console.log(pair);
-        bookInstanceObj[pair[0]] = pair[1];
+        if (pair[1]) {
+          bookInstanceObj[pair[0]] = pair[1];
+        } else {
+          bookInstanceObj[pair[0]] = undefined;
+        }
+        
         // console.log(pair[0] + ': ' + pair[1]);
       }
+      // if (bookInstanceObj['date_purchased'])
       console.log(bookInstanceObj);
       console.log(filteredBooks)
       if (!books.find((book) => book.title.toLowerCase() === bookInstanceObj['book'].trim().toLowerCase())){

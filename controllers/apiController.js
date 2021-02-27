@@ -3,8 +3,8 @@
 // const { name } = require('ejs');
 const Book = require('../models/book');
 const Author = require('../models/author');
-// const Genre = require('../models/genre');
-// const BookInstance = require('../models/bookinstance');
+const BookInstance = require('../models/bookinstance');
+const Borrower = require('../models/borrower');
 
 /** ********
  **** controller for all api related routes ****
@@ -39,4 +39,18 @@ exports.author_list = async (req, res) => {
     res.send({ error: 'An error occured' });
   }
   res.send({ authors: data.author_list });
+};
+
+exports.borrower_list = async (req, res) => {
+  const data = {
+    borrower_list: undefined,
+  };
+  try {
+    data.borrower_list = await Borrower.find({}, 'name');
+  } catch (error) {
+    console.log(error);
+    res.send({ error: 'An error occured' });
+  }
+
+  res.send({ borrowers: data.borrower_list });
 };

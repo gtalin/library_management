@@ -106,4 +106,22 @@ router.get('/bookinstance/:id', bookinstanceController.bookinstance_detail);
 router.get('/bookinstances', bookinstanceController.bookinstance_list);
 router.get('/bookinstances/:page', bookinstanceController.bookinstance_list);
 
+// GET request for borrowing a particular BookInstance.
+router.get(
+  '/bookinstance/:id/borrow',
+  bookinstanceController.bookinstance_borrow_get
+);
+
+// POST request for borrowing a particular BookInstance
+router.post(
+  '/bookinstance/:id/borrow',
+  bookinstanceController.bookinstance_borrow_post
+);
+
+// GET request for borrowing a particular BookInstance.
+router.get(
+  '/bookinstance/:id/return',
+  bookinstanceController.bookinstance_return_book
+);
+
 module.exports = router;

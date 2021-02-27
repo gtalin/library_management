@@ -10,10 +10,13 @@
 
   <% if (data.book_instance_list && data.book_instance_list.length != 0) { %>
   <% data.book_instance_list.forEach(function(book) { %>
+    <% console.log(book.date_purchased) %>
   <li class="list-group-item">
-    <a href="<%= book.url %>">
+    <!-- <a href="<%= book.url %>"> -->
+    <a href="<%= `/catalog/bookinstance/${book._id}` %>">
      
       <%= book.book.title %>
+      
       <% /* %>
       <%= book.book.title %> : <%= book.book.author.name %>
       <% */ %>
@@ -26,6 +29,17 @@
     <% } else { %>
     ( <span class="text-warning"><%= book.status %></span> )
     <% } %>
+
+    <% if (book.status == 'Available') { %>
+      <a href="<%= `/catalog/bookinstance/${book._id}/borrow` %>" class="btn btn-success float-right">
+        Lend Book
+      </a>
+      
+      <% } else if(book.status == 'Loaned') {%>
+        <a href="<%= `/catalog/bookinstance/${book._id}/return` %>" class="btn btn-warning float-right">
+          Return Book
+        </a>
+        <% } %>
     
   </li>
   <% }); %>

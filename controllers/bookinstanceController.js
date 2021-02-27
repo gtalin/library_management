@@ -91,10 +91,12 @@ exports.bookinstance_detail = async (req, res, next) => {
   };
 
   try {
-    const instance = await BookInstance.findById(req.params.id).populate({
-      path: 'book',
-      select: 'title',
-    });
+    const instance = await BookInstance.findById(req.params.id)
+      .populate({
+        path: 'book',
+        select: 'title',
+      })
+      .populate('borrower');
     // .populate({ path: 'publisher', select: 'name' });
     // Only select the title field in book.
 
@@ -161,13 +163,10 @@ exports.bookinstance_create_post = [
 
     const book_instance = new BookInstance(req.body);
     // TODO:  check what's happening here with the date
-    if (req.date_purchased === '') {
-      book_instance.date_purchased = Date.now();
-    }
-    // if (req.due_back) {
-    //   book_instance.due_back = req.body.due_back;
+    // if (req.date_purchased === '') {
+    //   book_instance.date_purchased = Date.now();
     // }
-    // console.log('Book instance: ', book_instance);
+
     if (!errors.isEmpty()) {
       try {
         const books = await Book.find().sort({ title: 1 });
@@ -308,6 +307,106 @@ exports.bookinstance_update_post = [
         req.flash('success', 'Book Instance updated');
         res.redirect(instance.url);
       }
+    } catch (error) {
+      next(error);
+    }
+  },
+];
+
+exports.bookinstance_borrow_get = async (req, res, next) => {
+  try {
+    const book_instance = await BookInstance.findById(req.params.id)
+      .populate('book')
+      .populate('borrower');
+
+    console.log('Book instance is:', book_instance);
+
+    if (book_instance.date_borrowed) {
+      book_instance.db = isodateToString(book_instance.date_borrowed);
+      console.log('Date borrowed in book_instance is', book_instance.db);
+    }
+    console.log('Book instance in update get is:', book_instance);
+    res.render('./catalog/book_instance_borrow', {
+      title: 'Borrow book instance',
+      book_instance,
+      // books,
+      // publishers,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Handle bookinstance_borrow POST.
+exports.bookinstance_borrow_post = [
+  // Validate data
+
+  check('borrower')
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage('Please add a borrower'),
+
+  check('date_borrowed')
+    .notEmpty()
+    .withMessage('Please add a borrowed date')
+    // .optional({ checkFalsy: true })
+    .isISO8601()
+    .withMessage('Invalid date'),
+  // check('date').isRFC3339().withMessage('Invalid date '),
+
+  // Sanitize data
+  // body('id').escape(),
+  body('borrower').escape(),
+
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    console.log('Errors are:', errors);
+    try {
+      if (!errors.isEmpty()) {
+        res.render('./catalog/book_instance_form', {
+          title: 'Borrow book instance',
+          errors: errors.array(),
+          book_instance: req.body,
+          // books,
+          // publishers,
+        });
+      } else {
+        // const instance = new BookInstance(req.body);
+        const instance = await BookInstance.findById(req.params.id);
+        const borrowerInfo = req.body;
+        borrowerInfo.status = 'Loaned';
+        console.log('Borrower Info is', borrowerInfo);
+
+        console.log('Book borrowerInfo in update POST', borrowerInfo);
+
+        await BookInstance.findByIdAndUpdate(req.params.id, borrowerInfo);
+        req.flash('success', 'Book Instance updated');
+        res.redirect(instance.url);
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+];
+
+// Handle bookinstance_borrow POST.
+exports.bookinstance_return_book = [
+  async (req, res, next) => {
+    try {
+      const instance = await BookInstance.findById(req.params.id);
+      // const borrowerInfo = req.body;
+      // borrowerInfo.status = 'Loaned';
+      // console.log('Borrower Info is', borrowerInfo);
+
+      // console.log('Book borrowerInfo in update POST', borrowerInfo);
+      const borrowerInfo = {
+        status: 'Available',
+        borrower: undefined,
+        date_borrowed: undefined,
+      };
+      await BookInstance.findByIdAndUpdate(req.params.id, borrowerInfo);
+      req.flash('success', 'Book returned successfully');
+      res.redirect(instance.url);
     } catch (error) {
       next(error);
     }
