@@ -7,7 +7,7 @@
   <%= user? user : '' %>
 </strong> </p>
 <ul class="list-group my-5">
-  <li class="list-group-item" ><strong>Total number of books:</strong>
+  <li class="list-group-item" ><strong>Total number of copies of books:</strong>
     <%= numOfBookCopies? numOfBookCopies : '' %>
   </li>
   <li class="list-group-item"><strong>Books issued:</strong>
@@ -16,6 +16,11 @@
   <li class="list-group-item"><strong>Books available:</strong>
     <%= booksAvailable? booksAvailable : '' %>
   </li> 
+
+  <li class="list-group-item"><strong>Number of borrowers:</strong>
+    <%= numOfBorrowers? numOfBorrowers : '' %>
+  </li> 
+
 </ul>
 
   

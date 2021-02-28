@@ -1,7 +1,13 @@
 const router = require('express').Router();
+const basicAuth = require('express-basic-auth');
 const borrowerController = require('../controllers/borrowerController');
+const basicAuthOptions = require('../config/basicAuthOptions');
+
 //  /********* BORROWER ROUTES *********/ //
 // GET request for creating a borrower. NOTE this must come before routes that display borrower (uses id)
+
+// Protect the route so that it is accessible only to logged in users
+router.use(basicAuth(basicAuthOptions));
 
 // GET request for list of all borrower items
 router.get('/borrowers', borrowerController.borrower_list);

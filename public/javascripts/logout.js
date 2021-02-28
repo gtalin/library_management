@@ -10,7 +10,7 @@ function handleLogoutClick() {
   http.send('');
   if (http.status === 401) {
     alert("You're logged out now");
-    window.location.href = '/catalog';
+    window.location.href = '/';
   } else {
     alert('Logout failed');
   }

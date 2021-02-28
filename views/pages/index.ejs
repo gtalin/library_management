@@ -1,11 +1,45 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
+<%- include('../partials/head') -%>
+
+<%- include('../partials/header') -%>
+<div class="container-fluid">
+  <div class="row">
+    <main class="col-md-9 ml-sm-auto col-lg-10 px-4">
+      <section>
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h1">Library Management System</h1>
+        </div>
+        <%- include('../partials/flash-msg') -%>
+
+<!-- <p class="lead">Welcome to <strong>LocalLibrary</strong> </p> -->
+<h2 class="h2 py-2 mt-5"><%= title %></h2>
+<p class="mt-3">
+<%if (isLoggedIn) { %>
+Your're logged in.
+  Please proceed 
+    <a class="" href="/catalog">here</a> to access the Library management system.
+<% } else {%>
+  Your're not logged in.
+    Please  
+    <a class="" href="/admin/login">Login</a>
+     here, with the provided credentials, to continue.
+  <% } %>
+</p>
+<% /* %>
+<% if (error != undefined) { %>
+<p>Error getting data from the database</p>
+<% } else  { %>
+<p>The library has the following records:</p>
+<% } %>
+<ul class="list-group my-5">
+  <li class="list-group-item"><strong>Books: </strong><%= data.book_count %></li>
+  <li class="list-group-item"><strong>Authors: </strong><%= data.author_count %></li>
+  <li class="list-group-item"><strong>Copies in Library: </strong><%= data.book_instance_count %></li>
+  <li class="list-group-item"><strong>Copies Available: </strong><%= data.book_instance_available_count %></li>
+  
+  <!-- <li class="list-group-item"><strong>Genres: </strong><%= data.genre_count %></li> -->
+</ul>
+
+<% */ %>
+
+<%- include('../partials/footer') -%>

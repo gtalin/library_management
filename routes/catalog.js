@@ -1,11 +1,15 @@
 const express = require('express');
 
 const router = express.Router();
+const basicAuth = require('express-basic-auth');
 
+const basicAuthOptions = require('../config/basicAuthOptions');
 const bookController = require('../controllers/bookController');
 const authorController = require('../controllers/authorController');
 const bookinstanceController = require('../controllers/bookinstanceController');
 
+// protecting all routes
+router.use(basicAuth(basicAuthOptions));
 //  /********* BOOK ROUTES *********/ //
 // Get catalog home page
 router.get('/', bookController.index);
