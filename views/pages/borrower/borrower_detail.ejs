@@ -18,10 +18,26 @@
   <%= data.borrowerDetails.address %>
 </p>
 
-
-<% } %>
-
 <hr />
+
+<% console.log("Books borrowed by user are", data.books) %>
+  <% } %>
+
+    <% if(data.books.length!==0){ %>
+      <h5>Books issued to the user:</h5>
+      <ul class="list-group">
+      <% for(var i=0; i < data.books.length; i++) { %>
+        <!-- <p>
+          <strong>Book Title: </strong><%= data.books[i].book.title %>
+        </p> -->
+        <li class="list-group-item">
+          <strong>Title: </strong>
+          <a href="<%= data.books[i].url %>"><%= data.books[i].book.title %></a>
+        </li>
+        <!-- <li class="list-group-item"><%= data.books[i].book.publisher %></li> -->
+     <% } %>
+    <!-- </ul> -->
+    <% } %>
 
 <div class="ml-3 mt-5">
   
@@ -29,6 +45,9 @@
     <a class="btn btn-danger" href="<%=data.borrowerDetails.url+'/delete'%>">Delete borrower</a>
     <a class="btn btn-primary" href="<%=data.borrowerDetails.url+'/update'%>">Update borrower</a>
   </p>
+
+  
+  
 </div>
 
 

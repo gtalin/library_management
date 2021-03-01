@@ -2,6 +2,7 @@
 const { check, validationResult, body } = require('express-validator');
 
 const Borrower = require('../models/borrower');
+const BookInstance = require('../models/bookinstance');
 
 const escapeRegex = require('../utilities/regex-escape');
 
@@ -49,12 +50,17 @@ exports.borrower_detail = async (req, res, next) => {
   let error;
   const data = {
     borrowerDetails: undefined,
+    books: [],
   };
+  const borrowerId = req.params.id;
   try {
-    const borrowerDetails = await Borrower.findById(req.params.id);
+    data.borrowerDetails = await Borrower.findById(borrowerId);
     // .populate('genre');
-
-    data.borrowerDetails = borrowerDetails;
+    console.log('The borrower Id is:', borrowerId);
+    const books = await BookInstance.find({ borrower: borrowerId }).populate(
+      'book'
+    );
+    data.books = books;
   } catch (error) {
     console.log(error);
 
