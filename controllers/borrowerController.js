@@ -161,9 +161,18 @@ exports.borrower_delete_get = async (req, res, next) => {
 exports.borrower_delete_post = async (req, res, next) => {
   try {
     const { borrowerid } = req.body;
-    await Borrower.findByIdAndDelete(borrowerid);
-    req.flash('danger', 'Borrower deleted');
-    res.redirect('/borrower/borrowers');
+    const booksIssued = await BookInstance.find({ borrower: borrowerid });
+    if (booksIssued.length === 0) {
+      await Borrower.findByIdAndDelete(borrowerid);
+      req.flash('danger', 'Borrower deleted');
+      res.redirect('/borrower/borrowers');
+    } else {
+      req.flash(
+        'danger',
+        'Cannot delete the borrower! Please return the books issued to the borrower before attempting to delete them.'
+      );
+      res.redirect(`/borrower/${borrowerid}`);
+    }
   } catch (error) {
     next(error);
   }
