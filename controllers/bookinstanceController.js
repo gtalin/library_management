@@ -13,7 +13,7 @@ exports.bookinstance_list = async (req, res) => {
   const data = {
     book_instance_list: undefined,
   };
-  const resultsPerPage = 5; // results per page
+  const resultsPerPage = 10; // results per page
   const pageNum = req.params.page || 1; // Page
   const searchQuery = req.query.search;
   // const searchQuery = 'the';
@@ -40,6 +40,7 @@ exports.bookinstance_list = async (req, res) => {
       },
       { $unwind: '$book' },
       { $match: { 'book.title': regex } },
+      { $sort: { 'book.title': 1 } },
       {
         $lookup: {
           from: 'authors',

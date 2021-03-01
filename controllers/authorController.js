@@ -54,7 +54,7 @@ exports.author_list = async (req, res, next) => {
     bookCount: [],
   };
 
-  const resultsPerPage = 5; // results per page
+  const resultsPerPage = 10; // results per page
   const pageNum = req.params.page || 1; // Page
   const searchQuery = req.query.search;
   console.log(searchQuery);
