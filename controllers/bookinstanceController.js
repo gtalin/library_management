@@ -320,7 +320,7 @@ exports.bookinstance_borrow_get = async (req, res, next) => {
       .populate('borrower');
 
     console.log('Book instance is:', book_instance);
-
+    console.log('Date borrowed ', book_instance.date_borrowed);
     if (book_instance.date_borrowed) {
       book_instance.db = isodateToString(book_instance.date_borrowed);
       console.log('Date borrowed in book_instance is', book_instance.db);
@@ -375,9 +375,7 @@ exports.bookinstance_borrow_post = [
         const instance = await BookInstance.findById(req.params.id);
         const borrowerInfo = req.body;
         borrowerInfo.status = 'Loaned';
-        console.log('Borrower Info is', borrowerInfo);
-
-        console.log('Book borrowerInfo in update POST', borrowerInfo);
+        console.log('Book borrowerInfo in book issue POST', borrowerInfo);
 
         await BookInstance.findByIdAndUpdate(req.params.id, borrowerInfo);
         req.flash('success', 'Book Instance updated');
@@ -389,16 +387,12 @@ exports.bookinstance_borrow_post = [
   },
 ];
 
-// Handle bookinstance_borrow POST.
+// Handle bookinstance_return GET.
 exports.bookinstance_return_book = [
   async (req, res, next) => {
     try {
       const instance = await BookInstance.findById(req.params.id);
-      // const borrowerInfo = req.body;
-      // borrowerInfo.status = 'Loaned';
-      // console.log('Borrower Info is', borrowerInfo);
 
-      // console.log('Book borrowerInfo in update POST', borrowerInfo);
       const borrowerInfo = {
         status: 'Available',
         borrower: undefined,
@@ -406,6 +400,26 @@ exports.bookinstance_return_book = [
       };
       await BookInstance.findByIdAndUpdate(req.params.id, borrowerInfo);
       req.flash('success', 'Book returned successfully');
+      res.redirect(instance.url);
+    } catch (error) {
+      next(error);
+    }
+  },
+];
+
+// Handle bookinstance_reissue GET.
+exports.bookinstance_reissue_book = [
+  async (req, res, next) => {
+    try {
+      const instance = await BookInstance.findById(req.params.id);
+      const currentDate = Date.now();
+      console.log('Update date issued to date today', currentDate);
+      const infoToUpdate = {
+        date_borrowed: currentDate,
+      };
+
+      await BookInstance.findByIdAndUpdate(req.params.id, infoToUpdate);
+      req.flash('success', 'Book re-issued');
       res.redirect(instance.url);
     } catch (error) {
       next(error);

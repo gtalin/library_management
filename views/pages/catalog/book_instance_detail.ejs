@@ -65,6 +65,9 @@
         <a href="<%= `/catalog/bookinstance/${data.instance._id}/return` %>" class="btn btn-warning">
           Return Book
         </a>
+        <a href="<%= `/catalog/bookinstance/${data.instance._id}/reissue` %>" class="btn btn-success">
+          Reissue Book
+        </a>
         <% } %>
     
     <a class="btn btn-primary" href="<%=data.instance.url+'/update'%>">Update Book Instance</a>

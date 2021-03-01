@@ -122,10 +122,16 @@ router.post(
   bookinstanceController.bookinstance_borrow_post
 );
 
-// GET request for borrowing a particular BookInstance.
+// GET request for returning a particular BookInstance.
 router.get(
   '/bookinstance/:id/return',
   bookinstanceController.bookinstance_return_book
+);
+
+// GET request for re-issuing a particular BookInstance.
+router.get(
+  '/bookinstance/:id/reissue',
+  bookinstanceController.bookinstance_reissue_book
 );
 
 module.exports = router;
