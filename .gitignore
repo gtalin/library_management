@@ -2,3 +2,4 @@ node_modules/
 _ignore/
 help.md 
 .env
+views/.DS_Store
