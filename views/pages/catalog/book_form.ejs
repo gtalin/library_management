@@ -115,6 +115,8 @@
         const alertMsg = 'Author does not exist in the database. Add Author to databse first';
         alertPlaceholder.innerHTML = `<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>${alertMsg}</span></div>`
       } else {
+        // Disable the submit button to prevent multiple creation
+        handleSubmitButtonDisable();
         alertPlaceholder.innerHTML = '';
         authors.forEach(author => {
           if (name.apply(author).toLowerCase() === bookObj['author'].trim().toLowerCase()) {
@@ -163,7 +165,7 @@
       // If book not in list, alert msg that book should be added to DB. 
       // Make a POST request using fetch
     }
-    
+
     author.addEventListener('keyup', handleInputChange);
     bookForm.addEventListener('submit', handleFormSubmit);
 

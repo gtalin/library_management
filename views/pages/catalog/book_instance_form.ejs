@@ -136,6 +136,8 @@
         const alertMsg = 'Book does not exist in the database. Add book to databse first';
         alertPlaceholder.innerHTML = `<div class="alert alert-danger"><a class="close" data-dismiss="alert">×</a><span>${alertMsg}</span></div>`
       } else {
+        // Disable the submit button to prevent multiple creation
+        handleSubmitButtonDisable();
         alertPlaceholder.innerHTML = '';
         books.forEach(book => {
           if (book.title.toLowerCase() === bookInstanceObj['book'].trim().toLowerCase()) {
