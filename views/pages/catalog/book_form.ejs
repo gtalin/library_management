@@ -5,7 +5,7 @@
 <h2 class="h2 mt-5"><%= title %></h2>
 <%- include('../../partials/form-error') -%>
 <!-- <form action="" method="POST"> -->
-<form id="book-form">
+<form id="book-form" class="was-validated">
 
   <div id = "alert_placeholder"></div>
 
@@ -13,6 +13,8 @@
     <label for="title">Title:</label>
     <input class="form-control" type="text" name="title" id="title" placeholder="Name of Book" required
       value="<%= typeof book!='undefined' ? book.title : '' %>">
+      <div class="invalid-feedback">Name of book is required</div>
+      <div class="valid-feedback">Looks good</div>
   </div>
 
   <div class="form-group">
@@ -20,6 +22,8 @@
     <input class="form-control" list="author-list" id="author" name="author"  required aria-placeholder="Select author" value="<%= typeof book!='undefined' ? book.author.name : '' %>" autocomplete="off"/>
     <datalist name="author-list" id="author-list" >
     </datalist>
+    <div class="invalid-feedback">Name of author is required</div>
+      <div class="valid-feedback">Looks good</div>
   </div>
 
   <div class="form-group">
@@ -27,12 +31,14 @@
     <input class="form-control" name="publisher" id="publisher"
       placeholder="Enter publisher of the book" value="<%= typeof book!='undefined' && book.publisher != undefined ? book.publisher : '' %>" 
       />
+      <div class="valid-feedback">Name of publisher is not mandatory</div>
   </div>
 
   <div class="form-group">
     <label for="summary">Summary:</label>
     <textarea class="form-control" name="summary" id="summary" rows="3"
       placeholder="Enter summary of the book"><%= typeof book!='undefined' && book.summary != undefined ? book.summary : '' %></textarea>
+      <div class="valid-feedback">Summary of book is not mandatory</div>
   </div>
 
   <button class="btn btn-primary" type="submit">Submit</button>

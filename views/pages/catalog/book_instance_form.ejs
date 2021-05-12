@@ -4,7 +4,7 @@
 
 <h2 class="h2 mt-5"><%= title %></h2>
 <%- include('../../partials/form-error') -%>
-<form id="book-instance-form">
+<form id="book-instance-form" class="was-validated">
 <!-- <form action="" method="POST" id="book-instance-form"> -->
 
   <div id = "alert_placeholder"></div>
@@ -13,6 +13,8 @@
       <label for="id">Internal Id:</label>
       <input class="form-control" type="text" name="id" id="id" placeholder="100" required
         value="<%= typeof book_instance!='undefined' ? book_instance.id : '' %>" autocomplete="off" >
+        <div class="invalid-feedback">Internal Id is required</div>
+        <div class="valid-feedback">Looks good</div>
     </div>
 
     <div class="form-group">
@@ -21,18 +23,23 @@
     <datalist name="book-list" id="book-list" >
     
     </datalist>
+    <div class="invalid-feedback">Name of book is required</div>
+    <div class="valid-feedback">Looks good</div>
   </div>
 
   <div class="form-group">
     <label for="price">Price (in Rs):</label>
     <input class="form-control" type="text" name="price" id="price" placeholder="100" required
       value="<%= typeof book_instance!='undefined' ? book_instance.price : '' %>">
+      <div class="invalid-feedback">Price of book is required</div>
+      <div class="valid-feedback">Looks good</div>
   </div>
 
   <div class="form-group">
     <label for="date_purchased">Date when book purchased:</label>
     <input class="form-control" type="date" name="date_purchased" id="date_purchased" placeholder="22/03/2020"
       value="<%= typeof book_instance!='undefined' && book_instance.date_purchased !='undefined' ? book_instance.dp : '' %>">
+      <div class="valid-feedback">Date purchased is not mandatory</div>
   </div>
 
   <div class="form-group">
@@ -56,6 +63,8 @@
       </option>
 
     </select>
+    <div class="invalid-feedback">Status book is required</div>
+    <div class="valid-feedback">Looks good</div>
   </div>
 
   <button class="btn btn-primary" type="submit">Submit</button>

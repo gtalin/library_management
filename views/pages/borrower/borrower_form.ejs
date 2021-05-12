@@ -5,7 +5,7 @@
 <h2 class="h2 mt-5"><%= title %></h2>
 <%- include('../../partials/form-error') -%>
 <!-- <form action="" method="POST"> -->
-<form id="borrower-form" action="" method="POST">
+<form id="borrower-form" action="" method="POST" class="was-validated">
 
   <div id = "alert_placeholder"></div>
 
@@ -13,18 +13,24 @@
     <label for="name">Name:</label>
     <input class="form-control" type="text" name="name" id="name" placeholder="Name of borrower" required
       value="<%= typeof borrower!='undefined' ? borrower.name : '' %>">
+      <div class="invalid-feedback">Name of borrower is required</div>
+      <div class="valid-feedback">Looks good</div>
   </div>
 
   <div class="form-group">
     <label for="mobileNumber">Mobile Number (without country code):</label>
-    <input class="form-control" type="text" name="mobileNumber" id="mobileNumber" placeholder="Mobile number" required
+    <input class="form-control" type="text" name="mobileNumber" id="mobileNumber" placeholder="Mobile number" required minlength="10" maxlength="10"
       value="<%= typeof borrower!='undefined' ? borrower.mobileNumber : '' %>">
+      <div class="invalid-feedback">Mobile number is required. Should be 10 digits long</div>
+      <div class="valid-feedback">Looks good</div>
   </div>
 
   <div class="form-group">
     <label for="summary">Address:</label>
     <textarea class="form-control" name="address" id="address" rows="3"
       placeholder="Enter address of the person" required><%= typeof borrower!='undefined' && borrower.address != undefined ? borrower.address : '' %></textarea>
+      <div class="invalid-feedback">Address of borrower is required</div>
+      <div class="valid-feedback">Looks good</div>
   </div>
 
   <button class="btn btn-primary" type="submit">Submit</button>
